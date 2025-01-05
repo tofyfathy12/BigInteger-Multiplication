@@ -20,10 +20,15 @@ char *add(char *num1, char *num2);
 char *convert_to_str(double num);
 long int str_to_int(char *number);
 char *get_positive_num(char *str, char *number);
+char *nines_complement(char *num, int digits_num);
+char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative);
 
 int main()
 {
     long int choice;
+    // char *num;
+    // get_num("Enter number: ", num);
+    // printf("Ten's complement of the number: %s\n", tens_complement(num, strlen(num) + 1));
     printf("======================Choose Operation======================\n");
     printf("[1] Multiplication\n");
     printf("[2] Power\n");
@@ -69,7 +74,7 @@ int main()
         char num2[1000];
         int is_m_negative = get_num("Enter Second Number : ", num2);
         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-        printf("%s x %s = %s\n", num1, num2, result);
+        printf("%c%s x %s = %s\n", num1, num2, result);
     }
     else if (power)
     {
@@ -83,15 +88,32 @@ int main()
     else if (addition)
     {
         char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
-        int is_n_negative = get_num("Enter Number : ", num1);
+        int is_n_negative = get_num("Enter First Number : ", num1);
         char num2[1000];
         int is_m_negative = get_num("Enter Second Number : ", num2);
-        char *result = add(num1, num2);
-        printf("%s + %s = %s\n", num1, num2, result);
+        char *result;
+        if (is_n_negative && is_m_negative)
+        {
+            result = add(num1, num2);
+            result = strdup(get_full_num(result, strlen(result) + 1));
+            result[0] = '-';
+        }
+        else if (is_n_negative && !is_m_negative)
+            result = subtract(num2, 0, num1, 0);
+        else if (!is_n_negative && is_m_negative)
+            result = subtract(num1, 0 ,num2, 0);
+        else
+            result = add(num1, num2);
+        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
     }
     else if (subtraction)
     {
-        // It's yet to be done.
+        char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = subtract(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
     }
     else if (division)
     {
@@ -364,4 +386,47 @@ char *get_positive_num(char *str, char *number)
         if (isnegative) printf("\nThis number can't be Negative\nTry again\n\n");
     } while (isnegative);
     return number;
+}
+
+char *nines_complement(char *num, int digits_num)
+{
+    num = strdup(get_full_num(num, digits_num));
+    for (int i = 0; i < strlen(num); i++)
+        num[i] = digit_to_char(9 - char_to_digit(num[i]));
+    return num;
+}
+
+char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
+{
+    if (isnum1negative && isnum2negative) return subtract(num2, 0, num1, 0);
+    else if (isnum1negative && !isnum2negative)
+    {
+        char *result = add(num1, num2);
+        result = strdup(get_full_num(result, strlen(result + 1)));
+        result[0] = '-';
+        return result;
+    }
+    else if (!isnum1negative && isnum2negative) return add(num1, num2);
+    else
+    {
+        int digits_num = max(strlen(num1), strlen(num2)) + 1;
+        num2 = strdup(nines_complement(num2, digits_num));
+        num1 = strdup(get_full_num(num1, digits_num));
+        char *result = add(num1, num2);
+        if (strlen(result) > digits_num)
+        {
+            char temp[3] = "00";
+            temp[1] = result[0];
+            result = add(temp, result + 1);
+        }
+        int i = 0;
+        while ((result + i)[0] == '0') i++;
+        result = result + i;
+        if (result[0] == '9')
+        {
+            result = strdup(nines_complement(result, strlen(result)));
+            result[0] = '-';
+        }
+        return result;
+    }
 }
