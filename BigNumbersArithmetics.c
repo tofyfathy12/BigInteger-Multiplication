@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <gtk/gtk.h>
 
 typedef struct CharNode
 {
