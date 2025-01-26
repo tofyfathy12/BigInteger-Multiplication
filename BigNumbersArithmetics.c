@@ -52,7 +52,7 @@ int main()
     printf("[2] Power\n");
     printf("[3] Addition\n");
     printf("[4] Subtraction\n");
-    printf("[5] Division\n");
+    // printf("[5] Division\n");
     printf("------------------------------------------------------------\n");
     bool multiplication = false;
     bool power = false;
@@ -76,9 +76,9 @@ int main()
         case 4:
             subtraction = true;
             break;
-        case 5:
-            division = true;
-            break;
+        // case 5:
+        //     division = true;
+        //     break;
         default:
             printf("\nInvalid Option !!\n--------Try Again--------\n\n");
         }
