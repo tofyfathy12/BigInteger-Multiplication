@@ -5,6 +5,18 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+typedef struct CharNode
+{
+    char letter;
+    struct CharNode *next;
+} CharNode;
+
+typedef struct String
+{
+    CharNode *firstletter;
+    int length;
+} String;
+
 char *get_full_num(char *num, long int full_size);
 void get_integer(char *str, long int *n);
 void get_positive_integer(char *str, long int *n);
@@ -22,6 +34,12 @@ long int str_to_int(char *number);
 char *get_positive_num(char *str, char *number);
 char *nines_complement(char *num, int digits_num);
 char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative);
+CharNode *CreateCharNode(char headletter);
+void insertCharNode(char letter, CharNode *headletter);
+String inputstring(char *str);
+void printstring(String string);
+CharNode *at(int index, String str);
+void FreeString(String *str);
 
 int main()
 {
@@ -69,25 +87,27 @@ int main()
 
     if (multiplication)
     {
-        char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
+        char num1[1000];
         int is_n_negative = get_num("Enter First Number : ", num1);
         char num2[1000];
         int is_m_negative = get_num("Enter Second Number : ", num2);
         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-        printf("%c%s x %s = %s\n", num1, num2, result);
+        printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
     }
     else if (power)
     {
-        char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
+        char num1[1000];
         int is_n_negative = get_num("Enter Number : ", num1);
         long int exponent;
         get_integer("Enter Power (Integer) : ", &exponent);
         char *result = mypow(num1, exponent, is_n_negative);
-        printf("%s ^ %d = %s\n", num1, exponent, result);
+        printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
+        free(result);
     }
     else if (addition)
     {
-        char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
+        char num1[1000];
         int is_n_negative = get_num("Enter First Number : ", num1);
         char num2[1000];
         int is_m_negative = get_num("Enter Second Number : ", num2);
@@ -95,7 +115,7 @@ int main()
         if (is_n_negative && is_m_negative)
         {
             result = add(num1, num2);
-            result = strdup(get_full_num(result, strlen(result) + 1));
+            result = get_full_num(result, strlen(result) + 1);
             result[0] = '-';
         }
         else if (is_n_negative && !is_m_negative)
@@ -104,20 +124,105 @@ int main()
             result = subtract(num1, 0 ,num2, 0);
         else
             result = add(num1, num2);
-        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
     }
     else if (subtraction)
     {
-        char num1[1000]; // accounting for the null-terminator and the negative sign if it exists
+        char num1[1000];
         int is_n_negative = get_num("Enter First Number : ", num1);
         char num2[1000];
         int is_m_negative = get_num("Enter Second Number : ", num2);
         char *result = subtract(num1, is_n_negative, num2, is_m_negative);
         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+        free(result);
     }
     else if (division)
     {
         // It's yet to be done.
+    }
+}
+
+CharNode *CreateCharNode(char headletter)
+{
+    CharNode *head = (CharNode *)malloc(sizeof(CharNode));
+    head->letter = headletter;
+    head->next = NULL;
+}
+
+void insertCharNode(char letter, CharNode *headletter)
+{
+    CharNode *nextletter = headletter;
+    while (nextletter->next != NULL)
+        nextletter = nextletter->next;
+    nextletter->next = CreateCharNode(letter);
+}
+
+String inputstring(char *str)
+{
+    String result;
+    printf("%s", str);
+    char letter;
+    letter = getchar();
+    if (letter == '\n')
+    {
+        result.firstletter = CreateCharNode('\0');
+        result.length = 0;
+        return result;
+    }
+    else
+    {
+        result.firstletter = CreateCharNode(letter);
+        result.length = 1;
+    }
+    while (letter != '\n')
+    {
+        letter = getchar();
+        if (letter == '\n') break;
+        insertCharNode(letter, result.firstletter);
+        result.length++;
+    }
+    return result;
+}
+
+void printstring(String string)
+{
+    CharNode *letter = string.firstletter;
+    while (letter != NULL)
+    {
+        printf("%c", letter->letter);
+        letter = letter->next;
+    }
+}
+
+CharNode *at(int index, String str)
+{
+    CharNode *letter = str.firstletter;
+    if (index >= str.length)
+    {
+        letter->letter = 0;
+        letter->next = NULL;
+        printf("Error: Index Out of Range !!\n");
+        return letter;
+    }
+    int i = 0;
+    while (i < index && letter != NULL)
+    {
+        letter = letter->next;
+        i++;
+    }
+    return letter;
+}
+
+void FreeString(String *str)
+{
+    CharNode *current = str->firstletter;
+    while (current != NULL)
+    {
+        CharNode *next = current->next;
+        free(current);
+        current = NULL;
+        current = next;
     }
 }
 
@@ -307,6 +412,8 @@ char *multiply(char *num1, int isnum1negative, char *num2, int isnum2negative)
             final[i] = final[i - 1];
         final[0] = '-';
     }
+    free(num1p);
+    free(num2p);
     return final;
 }
 
@@ -315,7 +422,10 @@ char *mypow(char *base, long int exponent, int is_negative)
     char *result = multiply(base, 0, base, 0);
     for (int i = 2; i < exponent; i++)
     {
-        result = multiply(result, 0, base, 0);
+        char temp[strlen(result) + 1];
+        strcpy(temp, result);
+        free(result);
+        result = multiply(temp, 0, base, 0);
     }
     int size = strlen(result) + 2;
     char *final = (char *)realloc(result, size * sizeof(char));
@@ -347,6 +457,8 @@ char *add(char *num1, char *num2)
     }
     result[0] = digit_to_char(carry);
     char *final = removed_leading_zeros(result);
+    free(full_num1);
+    free(full_num2);
     return final;
 }
 
@@ -390,7 +502,7 @@ char *get_positive_num(char *str, char *number)
 
 char *nines_complement(char *num, int digits_num)
 {
-    num = strdup(get_full_num(num, digits_num));
+    num = get_full_num(num, digits_num);
     for (int i = 0; i < strlen(num); i++)
         num[i] = digit_to_char(9 - char_to_digit(num[i]));
     return num;
@@ -402,7 +514,7 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
     else if (isnum1negative && !isnum2negative)
     {
         char *result = add(num1, num2);
-        result = strdup(get_full_num(result, strlen(result + 1)));
+        result = get_full_num(result, strlen(result + 1));
         result[0] = '-';
         return result;
     }
@@ -410,23 +522,28 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
     else
     {
         int digits_num = max(strlen(num1), strlen(num2)) + 1;
-        num2 = strdup(nines_complement(num2, digits_num));
-        num1 = strdup(get_full_num(num1, digits_num));
+        num2 = nines_complement(num2, digits_num);
+        num1 = get_full_num(num1, digits_num);
         char *result = add(num1, num2);
         if (strlen(result) > digits_num)
         {
             char temp[3] = "00";
             temp[1] = result[0];
-            result = add(temp, result + 1);
+            char temp2[strlen(result) + 1];
+            strcpy(temp2, result + 1);
+            free(result);
+            result = add(temp, temp2);
         }
         int i = 0;
         while ((result + i)[0] == '0') i++;
         result = result + i;
         if (result[0] == '9')
         {
-            result = strdup(nines_complement(result, strlen(result)));
+            result = nines_complement(result, strlen(result));
             result[0] = '-';
         }
+        free(num1);
+        free(num2);
         return result;
     }
 }

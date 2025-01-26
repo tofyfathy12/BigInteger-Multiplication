@@ -25,8 +25,8 @@ void insertCharNode(char letter, CharNode *headletter)
 typedef struct String
 {
     CharNode *firstletter;
+    int length;
 } String;
-
 
 String inputstring(char *str)
 {
@@ -34,11 +34,23 @@ String inputstring(char *str)
     printf("%s", str);
     char letter;
     letter = getchar();
-    result.firstletter = CreateCharNode(letter);
+    if (letter == '\n')
+    {
+        result.firstletter = CreateCharNode('\0');
+        result.length = 0;
+        return result;
+    }
+    else
+    {
+        result.firstletter = CreateCharNode(letter);
+        result.length = 1;
+    }
     while (letter != '\n')
     {
         letter = getchar();
+        if (letter == '\n') break;
         insertCharNode(letter, result.firstletter);
+        result.length++;
     }
     return result;
 }
@@ -53,9 +65,48 @@ void printstring(String string)
     }
 }
 
+CharNode *at(int index, String str)
+{
+    CharNode *letter = str.firstletter;
+    if (index >= str.length)
+    {
+        letter->letter = 0;
+        letter->next = NULL;
+        printf("Error: Index Out of Range !!\n");
+        return letter;
+    }
+    int i = 0;
+    while (i < index && letter != NULL)
+    {
+        letter = letter->next;
+        i++;
+    }
+    return letter;
+}
+
+void FreeString(String *str)
+{
+    CharNode *current = str->firstletter;
+    while (current != NULL)
+    {
+        CharNode *next = current->next;
+        free(current);
+        current = NULL;
+        current = next;
+    }
+}
+
 int main()
 {
     String string = inputstring("Enter word: ");
     printf("The string you entered: ");
     printstring(string);
+    printf("length of string: %d\n", string.length);
+    for (int i = 0; i < string.length; i++)
+    {
+        printf("at(%d, ", i);
+        printstring(string);
+        printf(") = %c\n", at(i, string)->letter);
+    }
+    FreeString(&string);
 }
