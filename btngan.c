@@ -59,17 +59,27 @@ void on_click(GtkButton *btn, gpointer userdata)
         entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry2"));
         operation = GTK_LABEL(gtk_builder_get_object(builder, "mlabel"));
         const gchar *op_text = gtk_label_get_text(operation);
-        gchar *num1 = (gchar *)gtk_entry_get_text(entry1);
-        gchar *num2 = (gchar *)gtk_entry_get_text(entry2);
+        gchar *num1 = g_strdup((gchar *)gtk_entry_get_text(entry1));
+        gchar *num2 = g_strdup((gchar *)gtk_entry_get_text(entry2));
         int num1_negative = check_num_sign(num1, buffer);
         if (num1_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         int num2_negative = check_num_sign(num2, buffer);
         if (num2_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         g_print("%s\n%s\n", num1, num2);
         result = multiply((char *)num1, num1_negative, (char *)num2, num2_negative);
         gtk_text_buffer_set_text(buffer, (const gchar *)result, (gint)strlen(result));
+        g_free(num1);
+        g_free(num2);
     }
     else if (g_strcmp0(fixed_name, "Power") == 0)
     {
@@ -77,22 +87,34 @@ void on_click(GtkButton *btn, gpointer userdata)
         entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
         operation = GTK_LABEL(gtk_builder_get_object(builder, "plabel"));
         const gchar *op_text = gtk_label_get_text(operation);
-        gchar *num1 = (gchar *)gtk_entry_get_text(entry1);
-        gchar *num2 = (gchar *)gtk_entry_get_text(entry2);
+        gchar *num1 = g_strdup((gchar *)gtk_entry_get_text(entry1));
+        gchar *num2 = g_strdup((gchar *)gtk_entry_get_text(entry2));
         int num1_negative = check_num_sign(num1, buffer);
         if (num1_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         int num2_negative = check_num_sign(num2, buffer);
         if (num2_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         if (num2_negative == 1)
         {
             gtk_text_buffer_set_text(buffer, "Power Can't Be Negative\n", 24);
+            g_free(num1);
+            g_free(num2);
             return;
         }
         g_print("%s\n%s\n", num1, num2);
         result = mypow(num1, atol(num2), num1_negative);
         gtk_text_buffer_set_text(buffer, (const gchar *)result, (gint)strlen(result));
+        g_free(num1);
+        g_free(num2);
     }
     else if (g_strcmp0(fixed_name, "Addition") == 0)
     {
@@ -100,17 +122,27 @@ void on_click(GtkButton *btn, gpointer userdata)
         entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry6"));
         operation = GTK_LABEL(gtk_builder_get_object(builder, "alabel"));
         const gchar *op_text = gtk_label_get_text(operation);
-        gchar *num1 = (gchar *)gtk_entry_get_text(entry1);
-        gchar *num2 = (gchar *)gtk_entry_get_text(entry2);
+        gchar *num1 = g_strdup((gchar *)gtk_entry_get_text(entry1));
+        gchar *num2 = g_strdup((gchar *)gtk_entry_get_text(entry2));
         int num1_negative = check_num_sign(num1, buffer);
         if (num1_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         int num2_negative = check_num_sign(num2, buffer);
         if (num2_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         g_print("%s\n%s\n", num1, num2);
         result = add_signed(num1, num1_negative, num2, num2_negative);
         gtk_text_buffer_set_text(buffer, (const gchar *)result, (gint)strlen(result));
+        g_free(num1);
+        g_free(num2);
     }
     else if (g_strcmp0(fixed_name, "Subtraction") == 0)
     {
@@ -118,17 +150,27 @@ void on_click(GtkButton *btn, gpointer userdata)
         entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry8"));
         operation = GTK_LABEL(gtk_builder_get_object(builder, "slabel"));
         const gchar *op_text = gtk_label_get_text(operation);
-        gchar *num1 = (gchar *)gtk_entry_get_text(entry1);
-        gchar *num2 = (gchar *)gtk_entry_get_text(entry2);
+        gchar *num1 = g_strdup((gchar *)gtk_entry_get_text(entry1));
+        gchar *num2 = g_strdup((gchar *)gtk_entry_get_text(entry2));
         int num1_negative = check_num_sign(num1, buffer);
         if (num1_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         int num2_negative = check_num_sign(num2, buffer);
         if (num2_negative == -1)
+        {
+            g_free(num1);
+            g_free(num2);
             return;
+        }
         g_print("%s\n%s\n", num1, num2);
         result = subtract(num1, num1_negative, num2, num2_negative);
         gtk_text_buffer_set_text(buffer, (const gchar *)result, (gint)strlen(result));
+        g_free(num1);
+        g_free(num2);
     }
     free(result);
 }

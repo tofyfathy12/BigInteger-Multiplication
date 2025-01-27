@@ -40,6 +40,7 @@ String inputstring(char *str);
 void printstring(String string);
 CharNode *at(int index, String str);
 void FreeString(String *str);
+char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative);
 
 // int main()
 // {
@@ -542,7 +543,14 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
         result = result + i;
         if (result[0] == '9')
         {
-            result = nines_complement(result, strlen(result));
+            char *temp = strdup(result);
+            free(result);
+            result = nines_complement(temp, strlen(temp));
+            free(temp);
+            temp = strdup(result);
+            free(result);
+            result = removed_leading_zeros(temp);
+            free(temp);
             result[0] = '-';
         }
         free(num1);
