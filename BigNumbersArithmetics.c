@@ -108,19 +108,7 @@ void FreeString(String *str);
 //         int is_n_negative = get_num("Enter First Number : ", num1);
 //         char num2[1000];
 //         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result;
-//         if (is_n_negative && is_m_negative)
-//         {
-//             result = add(num1, num2);
-//             result = get_full_num(result, strlen(result) + 1);
-//             result[0] = '-';
-//         }
-//         else if (is_n_negative && !is_m_negative)
-//             result = subtract(num2, 0, num1, 0);
-//         else if (!is_n_negative && is_m_negative)
-//             result = subtract(num1, 0 ,num2, 0);
-//         else
-//             result = add(num1, num2);
+//         char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
 //         printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
 //         free(result);
 //     }
@@ -457,6 +445,24 @@ char *add(char *num1, char *num2)
     free(full_num1);
     free(full_num2);
     return final;
+}
+
+char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative)
+{
+    char *result;
+    if (is_n_negative && is_m_negative)
+        {
+            result = add(num1, num2);
+            result = get_full_num(result, strlen(result) + 1);
+            result[0] = '-';
+        }
+        else if (is_n_negative && !is_m_negative)
+            result = subtract(num2, 0, num1, 0);
+        else if (!is_n_negative && is_m_negative)
+            result = subtract(num1, 0 ,num2, 0);
+        else
+            result = add(num1, num2);
+    return result;
 }
 
 char *convert_to_str(double num)
