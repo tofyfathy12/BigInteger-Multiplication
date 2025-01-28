@@ -41,93 +41,113 @@ void printstring(String string);
 CharNode *at(int index, String str);
 void FreeString(String *str);
 char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative);
+char *get_factorial(char *num);
 
-// int main()
-// {
-//     long int choice;
-//     printf("======================Choose Operation======================\n");
-//     printf("[1] Multiplication\n");
-//     printf("[2] Power\n");
-//     printf("[3] Addition\n");
-//     printf("[4] Subtraction\n");
-//     // printf("[5] Division\n");
-//     printf("------------------------------------------------------------\n");
-//     bool multiplication = false;
-//     bool power = false;
-//     bool addition = false;
-//     bool subtraction = false;
-//     bool division = false;
-//     do
-//     {
-//         get_integer("Your Choice : ", &choice);
-//         switch (choice)
-//         {
-//         case 1:
-//             multiplication = true;
-//             break;
-//         case 2:
-//             power = true;
-//             break;
-//         case 3:
-//             addition = true;
-//             break;
-//         case 4:
-//             subtraction = true;
-//             break;
-//         // case 5:
-//         //     division = true;
-//         //     break;
-//         default:
-//             printf("\nInvalid Option !!\n--------Try Again--------\n\n");
-//         }
-//     } while (!(multiplication || power || addition || subtraction || division));
+int main()
+{
+    long int choice;
+    printf("======================Choose Operation======================\n");
+    printf("[1] Multiplication\n");
+    printf("[2] Power\n");
+    printf("[3] Addition\n");
+    printf("[4] Subtraction\n");
+    printf("[5] Factorial\n");
+    // printf("[6] Division\n");
+    printf("------------------------------------------------------------\n");
+    bool multiplication = false;
+    bool power = false;
+    bool addition = false;
+    bool subtraction = false;
+    bool division = false;
+    bool factorial = false;
+    do
+    {
+        get_integer("Your Choice : ", &choice);
+        switch (choice)
+        {
+        case 1:
+            multiplication = true;
+            break;
+        case 2:
+            power = true;
+            break;
+        case 3:
+            addition = true;
+            break;
+        case 4:
+            subtraction = true;
+            break;
+        case 5:
+            factorial = true;
+            break;
+        // case 6:
+        //     division = true;
+        //     break;
+        default:
+            printf("\nInvalid Option !!\n--------Try Again--------\n\n");
+        }
+    } while (!(multiplication || power || addition || subtraction || division || factorial));
     
 
-//     if (multiplication)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-//         free(result);
-//     }
-//     else if (power)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter Number : ", num1);
-//         long int exponent;
-//         get_integer("Enter Power (Integer) : ", &exponent);
-//         char *result = mypow(num1, exponent, is_n_negative);
-//         printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
-//         free(result);
-//     }
-//     else if (addition)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-//         free(result);
-//     }
-//     else if (subtraction)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = subtract(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
-//         free(result);
-//     }
-//     else if (division)
-//     {
-//         // It's yet to be done.
-//     }
-// }
+    if (multiplication)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = multiply(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
+    }
+    else if (power)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter Number : ", num1);
+        long int exponent;
+        get_integer("Enter Power (Integer) : ", &exponent);
+        char *result = mypow(num1, exponent, is_n_negative);
+        printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
+        free(result);
+    }
+    else if (addition)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
+    }
+    else if (subtraction)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = subtract(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+        free(result);
+    }
+    else if (factorial)
+    {
+        char num[1000];
+        int is_n_negative;
+        do
+        {
+            is_n_negative = get_num("Enter Number : ", num);
+            if (is_n_negative)
+                printf("This Number Can't Be Negative !!\nTry Again\n");
+        } while (is_n_negative);
+        char *result = get_factorial(num);
+        printf("(%s)! = %s\n", num, result);
+        free(result);
+    }
+    else if (division)
+    {
+        // It's yet to be done.
+    }
+}
 
 CharNode *CreateCharNode(char headletter)
 {
@@ -215,8 +235,7 @@ void FreeString(String *str)
 char *get_full_num(char *num, long int full_size)
 {
     char *temp = (char *)calloc((full_size + 1), sizeof(char));
-    for (int i = 0; i < full_size; i++)
-        temp[i] = '0';
+    memset(temp, '0', full_size * sizeof(char));
     for (int i = 0; i < strlen(num); i++)
         temp[i + full_size - strlen(num)] = num[i];
     return temp;
@@ -299,13 +318,24 @@ long int min(long int a, long int b)
 }
 char *removed_leading_zeros(char *num)
 {
+    int is_zero = 0;
     int index = 0;
     while (num[index] == '0')
         index++;
     int length = strlen(num) - index;
+    if (length == 0)
+    {
+        length = 1;
+        is_zero = 1;
+    }
     char *ptr = (char *)calloc(length + 1, sizeof(char));
     for (int i = 0; i < length; i++)
-        ptr[i] = num[index + i];
+    {
+        if ((index + i) < strlen(num))
+            ptr[i] = num[index + i];
+    }
+    if (is_zero)
+        ptr[0] = '0';
     return ptr;
 }
 
@@ -454,8 +484,11 @@ char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative)
     if (is_n_negative && is_m_negative)
         {
             result = add(num1, num2);
-            result = get_full_num(result, strlen(result) + 1);
+            char *temp = strdup(result);
+            free(result);
+            result = get_full_num(temp, strlen(temp) + 1);
             result[0] = '-';
+            free(temp);
         }
         else if (is_n_negative && !is_m_negative)
             result = subtract(num2, 0, num1, 0);
@@ -518,30 +551,32 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
     else if (isnum1negative && !isnum2negative)
     {
         char *result = add(num1, num2);
-        result = get_full_num(result, strlen(result + 1));
+        char *temp = strdup(result);
+        free(result);
+        result = get_full_num(temp, strlen(temp) + 1);
+        free(temp);
         result[0] = '-';
         return result;
     }
     else if (!isnum1negative && isnum2negative) return add(num1, num2);
     else
     {
-        int digits_num = max(strlen(num1), strlen(num2)) + 1;
-        num2 = nines_complement(num2, digits_num);
-        num1 = get_full_num(num1, digits_num);
-        char *result = add(num1, num2);
+        int digits_num = max(strlen(num1), strlen(num2)) + 1; // 3
+        num2 = nines_complement(num2, digits_num); // 998
+        num1 = get_full_num(num1, digits_num); // 010
+        char *result = add(num1, num2); // 1008
+        int length = strlen(result);
         if (strlen(result) > digits_num)
         {
             char temp[3] = "00";
-            temp[1] = result[0];
+            temp[1] = result[0]; // 01
             char temp2[strlen(result) + 1];
             strcpy(temp2, result + 1);
             free(result);
-            result = add(temp, temp2);
+            result = add(temp, temp2); // 01 + 008
         }
-        int i = 0;
-        while ((result + i)[0] == '0') i++;
-        result = result + i;
-        if (result[0] == '9')
+        printf("at line %d result = %s\n", __LINE__, result);
+        if (result[0] == '9' && strlen(result) == length)
         {
             char *temp = strdup(result);
             free(result);
@@ -551,10 +586,38 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
             free(result);
             result = removed_leading_zeros(temp);
             free(temp);
-            result[0] = '-';
+            if (strlen(result) > 1 || strcmp(result, "0"))
+            {
+                int length = strlen(result);
+                result = (char *)realloc(result, (length + 2) * sizeof(char));
+                memmove(result + 1, result, length * sizeof(char));
+                result[0] = '-';
+            }
         }
         free(num1);
         free(num2);
         return result;
     }
+}
+
+char *get_factorial(char *num)
+{
+    printf("%s\n", num);
+    char *temp = subtract(num, 0, "1", 0);
+    printf("%s\n", temp);
+    char *result = strdup(num);
+    while (strcmp(temp, "0") != 0)
+    {
+        printf("%s\n", temp);
+        char *temp2 = strdup(result);
+        free(result);
+        result = multiply(temp2, 0, temp, 0);
+        free(temp2);
+        temp2 = subtract(temp, 0, "1", 0);
+        free(temp);
+        temp = strdup(temp2);
+        free(temp2);
+    }
+    free(temp);
+    return result;
 }

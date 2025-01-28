@@ -22,18 +22,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="textview">
-            <property name="width-request">200</property>
-            <property name="height-request">160</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="editable">False</property>
-            <property name="cursor-visible">False</property>
-            <property name="buffer">textbuffer1</property>
-            <property name="input-purpose">digits</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkStack" id="stack">
             <property name="width-request">100</property>
             <property name="height-request">80</property>
@@ -310,6 +298,25 @@
             <property name="x">200</property>
             <property name="y">120</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow">
+            <property name="width-request">200</property>
+            <property name="height-request">160</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTextView" id="textview">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="cursor-visible">False</property>
+                <property name="buffer">textbuffer1</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
