@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "BigNumbersArithmetics.c"
+#include "BigNumbersArithmetics.h"
 
 int check_num_sign(char *number, GtkTextBuffer *buffer) // It returns whether the number is positive(0) or negative(1)
 {
