@@ -561,10 +561,10 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
     else if (!isnum1negative && isnum2negative) return add(num1, num2);
     else
     {
-        int digits_num = max(strlen(num1), strlen(num2)) + 1; // 3
-        num2 = nines_complement(num2, digits_num); // 998
-        num1 = get_full_num(num1, digits_num); // 010
-        char *result = add(num1, num2); // 1008
+        int digits_num = max(strlen(num1), strlen(num2)) + 1;
+        num2 = nines_complement(num2, digits_num);
+        num1 = get_full_num(num1, digits_num);
+        char *result = add(num1, num2);
         int length = strlen(result);
         if (strlen(result) > digits_num)
         {
@@ -573,9 +573,8 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
             char temp2[strlen(result) + 1];
             strcpy(temp2, result + 1);
             free(result);
-            result = add(temp, temp2); // 01 + 008
+            result = add(temp, temp2);
         }
-        printf("at line %d result = %s\n", __LINE__, result);
         if (result[0] == '9' && strlen(result) == length)
         {
             char *temp = strdup(result);
@@ -602,13 +601,10 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
 
 char *get_factorial(char *num)
 {
-    printf("%s\n", num);
     char *temp = subtract(num, 0, "1", 0);
-    printf("%s\n", temp);
     char *result = strdup(num);
     while (strcmp(temp, "0") != 0)
     {
-        printf("%s\n", temp);
         char *temp2 = strdup(result);
         free(result);
         result = multiply(temp2, 0, temp, 0);
