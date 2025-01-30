@@ -46,111 +46,111 @@ char *get_factorial(char *num);
 char *multiplyFFT(const char *num1, const char *num2);
 void fft(double complex *a, int n, int invert);
 
-int main()
-{
-    long int choice;
-    printf("======================Choose Operation======================\n");
-    printf("[1] Multiplication\n");
-    printf("[2] Power\n");
-    printf("[3] Addition\n");
-    printf("[4] Subtraction\n");
-    printf("[5] Factorial\n");
-    // printf("[6] Division\n");
-    printf("------------------------------------------------------------\n");
-    bool multiplication = false;
-    bool power = false;
-    bool addition = false;
-    bool subtraction = false;
-    bool division = false;
-    bool factorial = false;
-    do
-    {
-        get_integer("Your Choice : ", &choice);
-        switch (choice)
-        {
-        case 1:
-            multiplication = true;
-            break;
-        case 2:
-            power = true;
-            break;
-        case 3:
-            addition = true;
-            break;
-        case 4:
-            subtraction = true;
-            break;
-        case 5:
-            factorial = true;
-            break;
-        // case 6:
-        //     division = true;
-        //     break;
-        default:
-            printf("\nInvalid Option !!\n--------Try Again--------\n\n");
-        }
-    } while (!(multiplication || power || addition || subtraction || division || factorial));
+// int main()
+// {
+//     long int choice;
+//     printf("======================Choose Operation======================\n");
+//     printf("[1] Multiplication\n");
+//     printf("[2] Power\n");
+//     printf("[3] Addition\n");
+//     printf("[4] Subtraction\n");
+//     printf("[5] Factorial\n");
+//     // printf("[6] Division\n");
+//     printf("------------------------------------------------------------\n");
+//     bool multiplication = false;
+//     bool power = false;
+//     bool addition = false;
+//     bool subtraction = false;
+//     bool division = false;
+//     bool factorial = false;
+//     do
+//     {
+//         get_integer("Your Choice : ", &choice);
+//         switch (choice)
+//         {
+//         case 1:
+//             multiplication = true;
+//             break;
+//         case 2:
+//             power = true;
+//             break;
+//         case 3:
+//             addition = true;
+//             break;
+//         case 4:
+//             subtraction = true;
+//             break;
+//         case 5:
+//             factorial = true;
+//             break;
+//         // case 6:
+//         //     division = true;
+//         //     break;
+//         default:
+//             printf("\nInvalid Option !!\n--------Try Again--------\n\n");
+//         }
+//     } while (!(multiplication || power || addition || subtraction || division || factorial));
     
 
-    if (multiplication)
-    {
-        char num1[1000];
-        int is_n_negative = get_num("Enter First Number : ", num1);
-        char num2[1000];
-        int is_m_negative = get_num("Enter Second Number : ", num2);
-        char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-        printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-        free(result);
-    }
-    else if (power)
-    {
-        char num1[1000];
-        int is_n_negative = get_num("Enter Number : ", num1);
-        long int exponent;
-        get_integer("Enter Power (Integer) : ", &exponent);
-        char *result = mypow(num1, exponent, is_n_negative);
-        printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
-        free(result);
-    }
-    else if (addition)
-    {
-        char num1[1000];
-        int is_n_negative = get_num("Enter First Number : ", num1);
-        char num2[1000];
-        int is_m_negative = get_num("Enter Second Number : ", num2);
-        char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
-        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-        free(result);
-    }
-    else if (subtraction)
-    {
-        char num1[1000];
-        int is_n_negative = get_num("Enter First Number : ", num1);
-        char num2[1000];
-        int is_m_negative = get_num("Enter Second Number : ", num2);
-        char *result = subtract(num1, is_n_negative, num2, is_m_negative);
-        printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
-        free(result);
-    }
-    else if (factorial)
-    {
-        char num[1000];
-        int is_n_negative;
-        do
-        {
-            is_n_negative = get_num("Enter Number : ", num);
-            if (is_n_negative)
-                printf("This Number Can't Be Negative !!\nTry Again\n");
-        } while (is_n_negative);
-        char *result = get_factorial(num);
-        printf("(%s)! = %s\n", num, result);
-        free(result);
-    }
-    else if (division)
-    {
-        // It's yet to be done.
-    }
-}
+//     if (multiplication)
+//     {
+//         char num1[1000];
+//         int is_n_negative = get_num("Enter First Number : ", num1);
+//         char num2[1000];
+//         int is_m_negative = get_num("Enter Second Number : ", num2);
+//         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
+//         printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+//         free(result);
+//     }
+//     else if (power)
+//     {
+//         char num1[1000];
+//         int is_n_negative = get_num("Enter Number : ", num1);
+//         long int exponent;
+//         get_integer("Enter Power (Integer) : ", &exponent);
+//         char *result = mypow(num1, exponent, is_n_negative);
+//         printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
+//         free(result);
+//     }
+//     else if (addition)
+//     {
+//         char num1[1000];
+//         int is_n_negative = get_num("Enter First Number : ", num1);
+//         char num2[1000];
+//         int is_m_negative = get_num("Enter Second Number : ", num2);
+//         char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
+//         printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+//         free(result);
+//     }
+//     else if (subtraction)
+//     {
+//         char num1[1000];
+//         int is_n_negative = get_num("Enter First Number : ", num1);
+//         char num2[1000];
+//         int is_m_negative = get_num("Enter Second Number : ", num2);
+//         char *result = subtract(num1, is_n_negative, num2, is_m_negative);
+//         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+//         free(result);
+//     }
+//     else if (factorial)
+//     {
+//         char num[1000];
+//         int is_n_negative;
+//         do
+//         {
+//             is_n_negative = get_num("Enter Number : ", num);
+//             if (is_n_negative)
+//                 printf("This Number Can't Be Negative !!\nTry Again\n");
+//         } while (is_n_negative);
+//         char *result = get_factorial(num);
+//         printf("(%s)! = %s\n", num, result);
+//         free(result);
+//     }
+//     else if (division)
+//     {
+//         // It's yet to be done.
+//     }
+// }
 
 CharNode *CreateCharNode(char headletter)
 {
