@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <complex.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -42,112 +43,114 @@ CharNode *at(int index, String str);
 void FreeString(String *str);
 char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative);
 char *get_factorial(char *num);
+char *multiplyFFT(const char *num1, const char *num2);
+void fft(double complex *a, int n, int invert);
 
-// int main()
-// {
-//     long int choice;
-//     printf("======================Choose Operation======================\n");
-//     printf("[1] Multiplication\n");
-//     printf("[2] Power\n");
-//     printf("[3] Addition\n");
-//     printf("[4] Subtraction\n");
-//     printf("[5] Factorial\n");
-//     // printf("[6] Division\n");
-//     printf("------------------------------------------------------------\n");
-//     bool multiplication = false;
-//     bool power = false;
-//     bool addition = false;
-//     bool subtraction = false;
-//     bool division = false;
-//     bool factorial = false;
-//     do
-//     {
-//         get_integer("Your Choice : ", &choice);
-//         switch (choice)
-//         {
-//         case 1:
-//             multiplication = true;
-//             break;
-//         case 2:
-//             power = true;
-//             break;
-//         case 3:
-//             addition = true;
-//             break;
-//         case 4:
-//             subtraction = true;
-//             break;
-//         case 5:
-//             factorial = true;
-//             break;
-//         // case 6:
-//         //     division = true;
-//         //     break;
-//         default:
-//             printf("\nInvalid Option !!\n--------Try Again--------\n\n");
-//         }
-//     } while (!(multiplication || power || addition || subtraction || division || factorial));
+int main()
+{
+    long int choice;
+    printf("======================Choose Operation======================\n");
+    printf("[1] Multiplication\n");
+    printf("[2] Power\n");
+    printf("[3] Addition\n");
+    printf("[4] Subtraction\n");
+    printf("[5] Factorial\n");
+    // printf("[6] Division\n");
+    printf("------------------------------------------------------------\n");
+    bool multiplication = false;
+    bool power = false;
+    bool addition = false;
+    bool subtraction = false;
+    bool division = false;
+    bool factorial = false;
+    do
+    {
+        get_integer("Your Choice : ", &choice);
+        switch (choice)
+        {
+        case 1:
+            multiplication = true;
+            break;
+        case 2:
+            power = true;
+            break;
+        case 3:
+            addition = true;
+            break;
+        case 4:
+            subtraction = true;
+            break;
+        case 5:
+            factorial = true;
+            break;
+        // case 6:
+        //     division = true;
+        //     break;
+        default:
+            printf("\nInvalid Option !!\n--------Try Again--------\n\n");
+        }
+    } while (!(multiplication || power || addition || subtraction || division || factorial));
     
 
-//     if (multiplication)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-//         free(result);
-//     }
-//     else if (power)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter Number : ", num1);
-//         long int exponent;
-//         get_integer("Enter Power (Integer) : ", &exponent);
-//         char *result = mypow(num1, exponent, is_n_negative);
-//         printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
-//         free(result);
-//     }
-//     else if (addition)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
-//         free(result);
-//     }
-//     else if (subtraction)
-//     {
-//         char num1[1000];
-//         int is_n_negative = get_num("Enter First Number : ", num1);
-//         char num2[1000];
-//         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = subtract(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
-//         free(result);
-//     }
-//     else if (factorial)
-//     {
-//         char num[1000];
-//         int is_n_negative;
-//         do
-//         {
-//             is_n_negative = get_num("Enter Number : ", num);
-//             if (is_n_negative)
-//                 printf("This Number Can't Be Negative !!\nTry Again\n");
-//         } while (is_n_negative);
-//         char *result = get_factorial(num);
-//         printf("(%s)! = %s\n", num, result);
-//         free(result);
-//     }
-//     else if (division)
-//     {
-//         // It's yet to be done.
-//     }
-// }
+    if (multiplication)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = multiply(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
+    }
+    else if (power)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter Number : ", num1);
+        long int exponent;
+        get_integer("Enter Power (Integer) : ", &exponent);
+        char *result = mypow(num1, exponent, is_n_negative);
+        printf("%c%s ^ %ld = %s\n", (is_n_negative) ? '-' : '\0', num1, exponent, result);
+        free(result);
+    }
+    else if (addition)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = add_signed(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s + %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+        free(result);
+    }
+    else if (subtraction)
+    {
+        char num1[1000];
+        int is_n_negative = get_num("Enter First Number : ", num1);
+        char num2[1000];
+        int is_m_negative = get_num("Enter Second Number : ", num2);
+        char *result = subtract(num1, is_n_negative, num2, is_m_negative);
+        printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+        free(result);
+    }
+    else if (factorial)
+    {
+        char num[1000];
+        int is_n_negative;
+        do
+        {
+            is_n_negative = get_num("Enter Number : ", num);
+            if (is_n_negative)
+                printf("This Number Can't Be Negative !!\nTry Again\n");
+        } while (is_n_negative);
+        char *result = get_factorial(num);
+        printf("(%s)! = %s\n", num, result);
+        free(result);
+    }
+    else if (division)
+    {
+        // It's yet to be done.
+    }
+}
 
 CharNode *CreateCharNode(char headletter)
 {
@@ -607,7 +610,8 @@ char *get_factorial(char *num)
     {
         char *temp2 = strdup(result);
         free(result);
-        result = multiply(temp2, 0, temp, 0);
+        // result = multiply(temp2, 0, temp, 0);
+        result = multiplyFFT(temp2, temp);
         free(temp2);
         temp2 = subtract(temp, 0, "1", 0);
         free(temp);
@@ -616,4 +620,122 @@ char *get_factorial(char *num)
     }
     free(temp);
     return result;
+}
+
+#include <complex.h>
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+// Recursive FFT implementation
+void fft(double complex *a, int n, int invert)
+{
+    if (n == 1) return;
+
+    double complex *a0 = malloc((n/2) * sizeof(double complex));
+    double complex *a1 = malloc((n/2) * sizeof(double complex));
+
+    for (int i = 0, j = 0; i < n; i += 2, j++) {
+        a0[j] = a[i];
+        a1[j] = a[i+1];
+    }
+    
+    fft(a0, n/2, invert);
+    fft(a1, n/2, invert);
+    
+    double angle = 2 * M_PI / n * (invert ? -1 : 1);
+    double complex w = 1, wn = cexp(angle * I);
+    for (int i = 0; i < n/2; i++) {
+        a[i] = a0[i] + w * a1[i];
+        a[i + n/2] = a0[i] - w * a1[i];
+        if (invert) {
+            a[i] /= 2;
+            a[i + n/2] /= 2;
+        }
+        w *= wn;
+    }
+    free(a0);
+    free(a1);
+}
+
+char *multiplyFFT(const char *num1, const char *num2)
+{
+    // Trim leading zeros
+    int start1 = 0, start2 = 0;
+    while (num1[start1] == '0' && num1[start1])
+        start1++;
+    while (num2[start2] == '0' && num2[start2])
+        start2++;
+    int len1 = strlen(num1 + start1);
+    int len2 = strlen(num2 + start2);
+
+    // Handle zero cases
+    if (len1 == 0 || len2 == 0)
+    {
+        char *res = strdup("0");
+        return res;
+    }
+
+    // Convert to reversed digit arrays
+    int *digits1 = malloc(len1 * sizeof(int));
+    int *digits2 = malloc(len2 * sizeof(int));
+    for (int i = 0; i < len1; i++)
+        digits1[i] = num1[start1 + len1 - 1 - i] - '0';
+    for (int i = 0; i < len2; i++)
+        digits2[i] = num2[start2 + len2 - 1 - i] - '0';
+
+    // Calculate FFT size (next power of 2 >= len1 + len2 - 1)
+    int fft_size = 1;
+    while (fft_size < len1 + len2 - 1)
+        fft_size <<= 1;
+
+    // Initialize FFT arrays
+    double complex *a = calloc(fft_size, sizeof(double complex));
+    double complex *b = calloc(fft_size, sizeof(double complex));
+    for (int i = 0; i < len1; i++)
+        a[i] = digits1[i];
+    for (int i = 0; i < len2; i++)
+        b[i] = digits2[i];
+
+    // Perform FFT and multiply
+    fft(a, fft_size, 0);
+    fft(b, fft_size, 0);
+    for (int i = 0; i < fft_size; i++)
+        a[i] *= b[i];
+    fft(a, fft_size, 1); // Inverse FFT
+
+    // Convert to integer digits
+    int *result = calloc(fft_size, sizeof(int));
+    for (int i = 0; i < fft_size; i++)
+        result[i] = (int)(creal(a[i]) + 0.5);
+
+    // Handle carries
+    int carry = 0;
+    for (int i = 0; i < len1 + len2; i++)
+    {
+        result[i] += carry;
+        carry = result[i] / 10;
+        result[i] %= 10;
+    }
+
+    // Find highest non-zero digit
+    int highest = len1 + len2 - 1;
+    while (highest > 0 && result[highest] == 0)
+        highest--;
+
+    // Convert to string
+    char *product = malloc((highest + 2) * sizeof(char));
+    for (int i = 0; i <= highest; i++)
+        product[i] = result[highest - i] + '0';
+    product[highest + 1] = '\0';
+
+    // Cleanup
+    free(digits1);
+    free(digits2);
+    free(a);
+    free(b);
+    free(result);
+    return product;
 }
