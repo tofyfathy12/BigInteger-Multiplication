@@ -1,22 +1,9 @@
 #include <stdio.h>
 #include <math.h>
-#include <complex.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
-
-typedef struct CharNode
-{
-    char letter;
-    struct CharNode *next;
-} CharNode;
-
-typedef struct String
-{
-    CharNode *firstletter;
-    int length;
-} String;
 
 char *get_full_num(char *num, long int full_size);
 void get_integer(char *str, long int *n);
@@ -34,17 +21,10 @@ char *convert_to_str(double num);
 long int str_to_int(char *number);
 char *get_positive_num(char *str, char *number);
 char *nines_complement(char *num, int digits_num);
-char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative);
-CharNode *CreateCharNode(char headletter);
-void insertCharNode(char letter, CharNode *headletter);
-String inputstring(char *str);
-void printstring(String string);
-CharNode *at(int index, String str);
-void FreeString(String *str);
+char *nines_comp_sub(char *num1, int isnum1negative, char *num2, int isnum2negative);
+char *brw_sub(char *num1, int isnum1negative, char *num2, int isnum2negative);
 char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative);
 char *get_factorial(char *num);
-char *multiplyFFT(const char *num1, const char *num2);
-void fft(double complex *a, int n, int invert);
 
 // int main()
 // {
@@ -90,7 +70,6 @@ void fft(double complex *a, int n, int invert);
 //             printf("\nInvalid Option !!\n--------Try Again--------\n\n");
 //         }
 //     } while (!(multiplication || power || addition || subtraction || division || factorial));
-    
 
 //     if (multiplication)
 //     {
@@ -99,7 +78,7 @@ void fft(double complex *a, int n, int invert);
 //         char num2[1000];
 //         int is_m_negative = get_num("Enter Second Number : ", num2);
 //         char *result = multiply(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s x %c%s = %s\n",(is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
+//         printf("%c%s x %c%s = %s\n", (is_n_negative) ? '-' : '\0', num1, (is_m_negative) ? '-' : '\0', num2, result);
 //         free(result);
 //     }
 //     else if (power)
@@ -128,8 +107,8 @@ void fft(double complex *a, int n, int invert);
 //         int is_n_negative = get_num("Enter First Number : ", num1);
 //         char num2[1000];
 //         int is_m_negative = get_num("Enter Second Number : ", num2);
-//         char *result = subtract(num1, is_n_negative, num2, is_m_negative);
-//         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char) 0, num1, (is_m_negative) ? '-' : (char) 0, num2, result);
+//         char *result = brw_sub(num1, is_n_negative, num2, is_m_negative);
+//         printf("%c%s - %c%s = %s\n", (is_n_negative) ? '-' : (char)0, num1, (is_m_negative) ? '-' : (char)0, num2, result);
 //         free(result);
 //     }
 //     else if (factorial)
@@ -151,89 +130,6 @@ void fft(double complex *a, int n, int invert);
 //         // It's yet to be done.
 //     }
 // }
-
-CharNode *CreateCharNode(char headletter)
-{
-    CharNode *head = (CharNode *)malloc(sizeof(CharNode));
-    head->letter = headletter;
-    head->next = NULL;
-}
-
-void insertCharNode(char letter, CharNode *headletter)
-{
-    CharNode *nextletter = headletter;
-    while (nextletter->next != NULL)
-        nextletter = nextletter->next;
-    nextletter->next = CreateCharNode(letter);
-}
-
-String inputstring(char *str)
-{
-    String result;
-    printf("%s", str);
-    char letter;
-    letter = getchar();
-    if (letter == '\n')
-    {
-        result.firstletter = CreateCharNode('\0');
-        result.length = 0;
-        return result;
-    }
-    else
-    {
-        result.firstletter = CreateCharNode(letter);
-        result.length = 1;
-    }
-    while (letter != '\n')
-    {
-        letter = getchar();
-        if (letter == '\n') break;
-        insertCharNode(letter, result.firstletter);
-        result.length++;
-    }
-    return result;
-}
-
-void printstring(String string)
-{
-    CharNode *letter = string.firstletter;
-    while (letter != NULL)
-    {
-        printf("%c", letter->letter);
-        letter = letter->next;
-    }
-}
-
-CharNode *at(int index, String str)
-{
-    CharNode *letter = str.firstletter;
-    if (index >= str.length)
-    {
-        letter->letter = 0;
-        letter->next = NULL;
-        printf("Error: Index Out of Range !!\n");
-        return letter;
-    }
-    int i = 0;
-    while (i < index && letter != NULL)
-    {
-        letter = letter->next;
-        i++;
-    }
-    return letter;
-}
-
-void FreeString(String *str)
-{
-    CharNode *current = str->firstletter;
-    while (current != NULL)
-    {
-        CharNode *next = current->next;
-        free(current);
-        current = NULL;
-        current = next;
-    }
-}
 
 char *get_full_num(char *num, long int full_size)
 {
@@ -311,14 +207,17 @@ char digit_to_char(int digit)
     result += 48;
     return result;
 }
+
 long int max(long int a, long int b)
 {
     return (a > b) ? a : b;
 }
+
 long int min(long int a, long int b)
 {
     return (a < b) ? a : b;
 }
+
 char *removed_leading_zeros(char *num)
 {
     int is_zero = 0;
@@ -328,17 +227,11 @@ char *removed_leading_zeros(char *num)
     int length = strlen(num) - index;
     if (length == 0)
     {
-        length = 1;
-        is_zero = 1;
+        char *ptr = strdup("0");
+        return ptr;
     }
-    char *ptr = (char *)calloc(length + 1, sizeof(char));
-    for (int i = 0; i < length; i++)
-    {
-        if ((index + i) < strlen(num))
-            ptr[i] = num[index + i];
-    }
-    if (is_zero)
-        ptr[0] = '0';
+    char *ptr = (char *)malloc((length + 1) * sizeof(char));
+    memmove(ptr, num + index, (length + 1) * sizeof(char));
     return ptr;
 }
 
@@ -438,24 +331,46 @@ char *multiply(char *num1, int isnum1negative, char *num2, int isnum2negative)
 
 char *mypow(char *base, long int exponent, int is_negative)
 {
-    char *result = multiply(base, 0, base, 0);
-    for (int i = 2; i < exponent; i++)
+    char *tempbase = strdup(base);
+    if (strcmp(tempbase, "0") == 0 || strcmp(tempbase, "1") == 0)
     {
-        char temp[strlen(result) + 1];
-        strcpy(temp, result);
-        free(result);
-        result = multiply(temp, 0, base, 0);
+        char *result = strdup(tempbase);
+        free(tempbase);
+        return result;
     }
-    int size = strlen(result) + 2;
-    char *final = (char *)realloc(result, size * sizeof(char));
-    final[size - 1] = '\0';
+    char *result = strdup("1");
+    long int temp = exponent;
+    while (temp > 0)
+    {
+        char *tempstr;
+        if (temp % 2 == 0)
+        {
+            tempstr = strdup(tempbase);
+            free(tempbase);
+            tempbase = multiply(tempstr, 0, tempstr, 0);
+            temp /= 2;
+        }
+        else
+        {
+            tempstr = strdup(result);
+            free(result);
+            result = multiply(tempstr, 0, tempbase, 0);
+            temp -= 1;
+        }
+        free(tempstr);
+    }
+    free(tempbase);
     if (exponent % 2 == 1 && is_negative)
     {
-        for (int i = size - 1; i > 0; i--)
-            final[i] = final[i - 1];
+        int size = strlen(result) + 2;
+        char *final = (char *)malloc(size * sizeof(char));
+        memmove(final + 1, result, (size - 1) * sizeof(char));
         final[0] = '-';
+        free(result);
+        return final;
     }
-    return final;
+    else
+        return result;
 }
 
 char *add(char *num1, char *num2)
@@ -485,20 +400,20 @@ char *add_signed(char *num1, int is_n_negative, char *num2, int is_m_negative)
 {
     char *result;
     if (is_n_negative && is_m_negative)
-        {
-            result = add(num1, num2);
-            char *temp = strdup(result);
-            free(result);
-            result = get_full_num(temp, strlen(temp) + 1);
-            result[0] = '-';
-            free(temp);
-        }
-        else if (is_n_negative && !is_m_negative)
-            result = subtract(num2, 0, num1, 0);
-        else if (!is_n_negative && is_m_negative)
-            result = subtract(num1, 0 ,num2, 0);
-        else
-            result = add(num1, num2);
+    {
+        result = add(num1, num2);
+        char *temp = strdup(result);
+        free(result);
+        result = get_full_num(temp, strlen(temp) + 1);
+        result[0] = '-';
+        free(temp);
+    }
+    else if (is_n_negative && !is_m_negative)
+        result = brw_sub(num2, 0, num1, 0);
+    else if (!is_n_negative && is_m_negative)
+        result = brw_sub(num1, 0, num2, 0);
+    else
+        result = add(num1, num2);
     return result;
 }
 
@@ -508,12 +423,13 @@ char *convert_to_str(double num)
     char number[1000];
     while (num > 0.1)
     {
-        number[index] = digit_to_char((int) fmod(num, 10));
-        num = (num - (int) fmod(num, 10)) / 10;
-        index ++;
+        number[index] = digit_to_char((int)fmod(num, 10));
+        num = (num - (int)fmod(num, 10)) / 10;
+        index++;
     }
     char *result = (char *)calloc(index + 1, sizeof(char));
-    for (int i = index - 1; i >= 0; i--) result[i] = number[index - 1 - i];
+    for (int i = index - 1; i >= 0; i--)
+        result[i] = number[index - 1 - i];
     return result;
 }
 
@@ -535,7 +451,8 @@ char *get_positive_num(char *str, char *number)
     do
     {
         isnegative = get_num(str, number);
-        if (isnegative) printf("\nThis number can't be Negative\nTry again\n\n");
+        if (isnegative)
+            printf("\nThis number can't be Negative\nTry again\n\n");
     } while (isnegative);
     return number;
 }
@@ -548,20 +465,23 @@ char *nines_complement(char *num, int digits_num)
     return num;
 }
 
-char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
+char *nines_comp_sub(char *num1, int isnum1negative, char *num2, int isnum2negative)
 {
-    if (isnum1negative && isnum2negative) return subtract(num2, 0, num1, 0);
+    if (isnum1negative && isnum2negative)
+        return nines_comp_sub(num2, 0, num1, 0);
     else if (isnum1negative && !isnum2negative)
     {
-        char *result = add(num1, num2);
-        char *temp = strdup(result);
-        free(result);
-        result = get_full_num(temp, strlen(temp) + 1);
-        free(temp);
+        int length = max(strlen(num1), strlen(num2)) + 3;
+        char *result = (char *)malloc(length * sizeof(char));
+        result[length - 1] = '\0';
         result[0] = '-';
+        char *temp = add(num1, num2);
+        memmove(result + 1, temp, (length - 2) * sizeof(char));
+        free(temp);
         return result;
     }
-    else if (!isnum1negative && isnum2negative) return add(num1, num2);
+    else if (!isnum1negative && isnum2negative)
+        return add(num1, num2);
     else
     {
         int digits_num = max(strlen(num1), strlen(num2)) + 1;
@@ -588,11 +508,11 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
             free(result);
             result = removed_leading_zeros(temp);
             free(temp);
-            if (strlen(result) > 1 || strcmp(result, "0"))
+            int length = strlen(result);
+            if (length > 1 || strcmp(result, "0"))
             {
-                int length = strlen(result);
                 result = (char *)realloc(result, (length + 2) * sizeof(char));
-                memmove(result + 1, result, length * sizeof(char));
+                memmove(result + 1, result, (length + 1) * sizeof(char));
                 result[0] = '-';
             }
         }
@@ -602,140 +522,114 @@ char *subtract(char *num1, int isnum1negative, char *num2, int isnum2negative)
     }
 }
 
+char *brw_sub(char *num1, int isnum1negative, char *num2, int isnum2negative)
+{
+    if (!isnum2negative && isnum2negative)
+        return add(num1, num2);
+    else if (isnum1negative && !isnum2negative)
+    {
+        int length = max(strlen(num1), strlen(num2)) + 3;
+        char *result = (char *)malloc(length * sizeof(char));
+        result[0] = '-';
+        result[length - 1] = '\0';
+        char *temp = add(num1, num2);
+        memmove(result + 1, temp, length - 2);
+        free(temp);
+        return result;
+    }
+    else if (isnum1negative && isnum2negative)
+        return brw_sub(num2, 0, num1, 0);
+    else
+    {
+        int length = max(strlen(num1), strlen(num2)) + 1;
+        char *temp_num1 = get_full_num(num1, length);
+        char *temp_num2 = get_full_num(num2, length);
+
+        int num1_is_greater = 0, num2_is_greater = 0;
+        if (strcmp(temp_num1, temp_num2) == 0)
+        {
+            char *result = strdup("0");
+            free(temp_num1);
+            free(temp_num2);
+            return result;
+        }
+        else if (strcmp(temp_num1, temp_num2) > 0)
+            num1_is_greater = 1;
+        else
+            num2_is_greater = 1;
+
+        char *result;
+        if (num1_is_greater)
+        {
+            int borrow = 0;
+            result = (char *)malloc((length + 1) * sizeof(char));
+            result[length] = '\0';
+            for (int i = length - 1; i >= 0; i--)
+            {
+                int result_digit = 0;
+                result_digit = temp_num1[i] - temp_num2[i] - borrow;
+                if (result_digit < 0)
+                {
+                    result_digit += 10;
+                    borrow = 1;
+                }
+                else
+                    borrow = 0;
+                result[i] = digit_to_char(result_digit);
+            }
+            free(temp_num1);
+            free(temp_num2);
+            char *temp_result = strdup(result);
+            free(result);
+            result = removed_leading_zeros(temp_result);
+            free(temp_result);
+            return result;
+        }
+        else if (num2_is_greater)
+        {
+            int borrow = 0;
+            result = (char *)malloc((length + 1) * sizeof(char));
+            result[length] = '\0';
+            for (int i = length - 1; i >= 0; i--)
+            {
+                int result_digit = temp_num2[i] - temp_num1[i] - borrow;
+                if (result_digit < 0)
+                {
+                    result_digit += 10;
+                    borrow = 1;
+                }
+                else
+                    borrow = 0;
+                result[i] = digit_to_char(result_digit);
+            }
+            free(temp_num1);
+            free(temp_num2);
+            int zeros_index = 0;
+            while (result[zeros_index] == '0')
+                zeros_index++;
+            memmove(result, result + zeros_index - 1, (length - zeros_index + 2) * sizeof(char));
+            result[0] = '-';
+            result = (char *)realloc(result, (strlen(result) + 1) * sizeof(char));
+            return result;
+        }
+    }
+}
+
 char *get_factorial(char *num)
 {
-    char *temp = subtract(num, 0, "1", 0);
     char *result = strdup(num);
-    while (strcmp(temp, "0") != 0)
+    int temp_int = str_to_int(num) - 1;
+    int size = strlen(num) + 1;
+    char temp[size];
+    memset(temp, '\0', size);
+    while (temp_int > 0)
     {
         char *temp2 = strdup(result);
         free(result);
-        // result = multiply(temp2, 0, temp, 0);
-        result = multiplyFFT(temp2, temp);
+        sprintf(temp, "%d", temp_int);
+        result = multiply(temp2, 0, temp, 0);
         free(temp2);
-        temp2 = subtract(temp, 0, "1", 0);
-        free(temp);
-        temp = strdup(temp2);
-        free(temp2);
+        temp_int--;
     }
-    free(temp);
     return result;
-}
-
-#include <complex.h>
-#include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
-// Recursive FFT implementation
-void fft(double complex *a, int n, int invert)
-{
-    if (n == 1) return;
-
-    double complex *a0 = malloc((n/2) * sizeof(double complex));
-    double complex *a1 = malloc((n/2) * sizeof(double complex));
-
-    for (int i = 0, j = 0; i < n; i += 2, j++) {
-        a0[j] = a[i];
-        a1[j] = a[i+1];
-    }
-    
-    fft(a0, n/2, invert);
-    fft(a1, n/2, invert);
-    
-    double angle = 2 * M_PI / n * (invert ? -1 : 1);
-    double complex w = 1, wn = cexp(angle * I);
-    for (int i = 0; i < n/2; i++) {
-        a[i] = a0[i] + w * a1[i];
-        a[i + n/2] = a0[i] - w * a1[i];
-        if (invert) {
-            a[i] /= 2;
-            a[i + n/2] /= 2;
-        }
-        w *= wn;
-    }
-    free(a0);
-    free(a1);
-}
-
-char *multiplyFFT(const char *num1, const char *num2)
-{
-    // Trim leading zeros
-    int start1 = 0, start2 = 0;
-    while (num1[start1] == '0' && num1[start1])
-        start1++;
-    while (num2[start2] == '0' && num2[start2])
-        start2++;
-    int len1 = strlen(num1 + start1);
-    int len2 = strlen(num2 + start2);
-
-    // Handle zero cases
-    if (len1 == 0 || len2 == 0)
-    {
-        char *res = strdup("0");
-        return res;
-    }
-
-    // Convert to reversed digit arrays
-    int *digits1 = malloc(len1 * sizeof(int));
-    int *digits2 = malloc(len2 * sizeof(int));
-    for (int i = 0; i < len1; i++)
-        digits1[i] = num1[start1 + len1 - 1 - i] - '0';
-    for (int i = 0; i < len2; i++)
-        digits2[i] = num2[start2 + len2 - 1 - i] - '0';
-
-    // Calculate FFT size (next power of 2 >= len1 + len2 - 1)
-    int fft_size = 1;
-    while (fft_size < len1 + len2 - 1)
-        fft_size <<= 1;
-
-    // Initialize FFT arrays
-    double complex *a = calloc(fft_size, sizeof(double complex));
-    double complex *b = calloc(fft_size, sizeof(double complex));
-    for (int i = 0; i < len1; i++)
-        a[i] = digits1[i];
-    for (int i = 0; i < len2; i++)
-        b[i] = digits2[i];
-
-    // Perform FFT and multiply
-    fft(a, fft_size, 0);
-    fft(b, fft_size, 0);
-    for (int i = 0; i < fft_size; i++)
-        a[i] *= b[i];
-    fft(a, fft_size, 1); // Inverse FFT
-
-    // Convert to integer digits
-    int *result = calloc(fft_size, sizeof(int));
-    for (int i = 0; i < fft_size; i++)
-        result[i] = (int)(creal(a[i]) + 0.5);
-
-    // Handle carries
-    int carry = 0;
-    for (int i = 0; i < len1 + len2; i++)
-    {
-        result[i] += carry;
-        carry = result[i] / 10;
-        result[i] %= 10;
-    }
-
-    // Find highest non-zero digit
-    int highest = len1 + len2 - 1;
-    while (highest > 0 && result[highest] == 0)
-        highest--;
-
-    // Convert to string
-    char *product = malloc((highest + 2) * sizeof(char));
-    for (int i = 0; i <= highest; i++)
-        product[i] = result[highest - i] + '0';
-    product[highest + 1] = '\0';
-
-    // Cleanup
-    free(digits1);
-    free(digits2);
-    free(a);
-    free(b);
-    free(result);
-    return product;
 }
